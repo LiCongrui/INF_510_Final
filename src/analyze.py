@@ -1,5 +1,5 @@
-from const import companies, visa_years
-from mysql_db import create_tables, conn, cur
+from .const import companies, visa_years
+from .mysql_db import conn, cur
 import matplotlib.pyplot as plt
 
 def show_visa_trending():
