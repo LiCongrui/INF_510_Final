@@ -84,6 +84,7 @@ def show_counts():
     plt.barh(range(len(keys)), values, tick_label=keys)
     plt.show()
 
+
 def search_position(title = '', loc = '', comp = ''):
     cur.execute("SELECT * FROM positions where title LIKE '%{}%' and location like '%{}%' limit 20".format(title, loc))
     result = cur.fetchall()
