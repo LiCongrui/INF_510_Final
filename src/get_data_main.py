@@ -1,4 +1,4 @@
-import argparse
+import argparse,re
 import pandas as pd
 
 from myvisa_scraper import get_data_from_myvisa, visa_pages, visa_years
@@ -67,10 +67,12 @@ def clean_save_job(data):
 
 
     for item in jobs:
-        item['company'] = item['company'].replace("'", "\\'")
-        item['description'] = item['description'].replace("'", "\\'")
+        reg = re.compile('<[^>]*>')
+        content = reg.sub('', item['description'])
+        content = re.sub('\"', '', content).strip()
+        item['description'] = content
         sql = 'INSERT INTO positions (company, title, location, created, url, description) VALUES \
-                ("{}", "{}", "{}", "{}", "{}", "{}")'.format(item['company'], item['title'],
+                ("{}", "{}", "{}", "{}", "{}", """{}""")'.format(item['company'], item['title'],
                                                   item['location'],
                                                   item['created'], item['url'], item['description'])
         # sql = 'INSERT INTO positions (company, title, location, created, url) VALUES \
@@ -81,7 +83,7 @@ def clean_save_job(data):
             cur.execute(sql)
         except Exception as e:
             print(e)
-            print(sql)
+            # print(sql)
             continue
 
     conn.commit()
@@ -151,14 +153,14 @@ if __name__ == "__main__":
     # create_tables()
 
     # visa single
-    # visa_records = get_data_from_myvisa(IF_TEST)
-    # clean_save_visa(visa_records)
+    visa_records = get_data_from_myvisa(IF_TEST)
+    clean_save_visa(visa_records)
 
     #positions
-    refresh_jobs()
-    github_jobs = pull_github_jobs(IF_TEST)
-    adzuna_jobs = pull_adzuna_jobs(IF_TEST)
-    data = {'github_jobs': github_jobs, 'adzuna_jobs': adzuna_jobs}
-    clean_save_job(data)
+    # refresh_jobs()
+    # github_jobs = pull_github_jobs(IF_TEST)
+    # adzuna_jobs = pull_adzuna_jobs(IF_TEST)
+    # data = {'github_jobs': github_jobs, 'adzuna_jobs': adzuna_jobs}
+    # clean_save_job(data)
 
 

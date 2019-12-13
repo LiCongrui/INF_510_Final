@@ -42,7 +42,7 @@ def pull_adzuna_jobs(if_test):
     print('pulling data from adzuna...')
 
     if if_test:
-        max_page = 11
+        max_page = 2
     else:
         max_page = 101
 

@@ -31,6 +31,7 @@ def create_tables():
 
 def refresh_jobs():
     # positions: id, company, title, location, description, created, url
+    # conn.close()
     cur.execute('DROP TABLE IF EXISTS positions')
     cur.execute("create table positions(" +
                 "position_id INTEGER primary key, "+

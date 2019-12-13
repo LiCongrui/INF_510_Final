@@ -2,8 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-visa_years = [i for i in range(2016, 2020)]
-visa_pages = [i for i in range(1, 101)]
+visa_years = [i for i in range(2016, 2019)]
+visa_pages = [i for i in range(10, 51)]
 visa_years_test = [2019]
 visa_pages_test = [i for i in range(1, 101)]
 
