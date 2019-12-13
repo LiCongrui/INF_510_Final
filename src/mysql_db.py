@@ -1,6 +1,7 @@
 import sqlite3
 import os
-conn = sqlite3.connect("data/career.db")
+conn = sqlite3.connect("data/career.db") #jupyter notebook use this
+# conn = sqlite3.connect("../data/career.db") #local use this
 cur = conn.cursor()
 
 
@@ -24,6 +25,25 @@ def create_tables():
                 "sponsor varchar(50),"+
                 "num_of_LCA integer , ave_salary varchar(10), ryear char(4))")
 
+    # company: id, name, location, year_founded, category, description
+    cur.execute('DROP TABLE IF EXISTS companies')
+    cur.execute("create table companies("+
+                "id varchar primary key, "+
+                "name varchar(50) , "   +
+                "year_founded char(4), "+
+                "location varchar(20), "+
+                "category varchar(20) ,"+
+                "description text)")
+
+    cur.execute('DROP TABLE IF EXISTS salaries')
+    cur.execute("create table salaries("+
+                "id Integer primary key, "+
+                "title varchar(20) , "   +
+                "company char(30), "+
+                "base_pay integer, "+
+                "positions integer)")
+
+
     cur.execute("SELECT name FROM sqlite_master")
     result = cur.fetchall()
     print('create table: ', result)
@@ -44,4 +64,11 @@ def refresh_jobs():
     conn.commit()
 
 if __name__ == '__main__':
-    pass
+    cur.execute('DROP TABLE IF EXISTS salaries')
+    cur.execute("create table salaries("+
+                "id Integer primary key, "+
+                "title varchar(20) , "   +
+                "company char(30), "+
+                "base_pay integer, "+
+                "positions integer)")
+    conn.commit()

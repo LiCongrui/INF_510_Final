@@ -16,6 +16,8 @@ def grab_data_by_scraping_and_api_requests(if_test):
     github_jobs = pull_github_jobs(if_test)
     adzuna_jobs = pull_adzuna_jobs(if_test)
 
+    clean_save_company()
+
     # # Manual options for the company, num pages to scrape, and URL
     pages = 1
     companyName = "microsoft"
@@ -65,7 +67,6 @@ def clean_save_job(data):
             'url': item['redirect_url']
         })
 
-
     for item in jobs:
         reg = re.compile('<[^>]*>')
         content = reg.sub('', item['description'])
@@ -108,9 +109,28 @@ def clean_save_visa(data):
     conn.commit()
 
 
-def clean_save_company(data):
-    print(data)
-    pass
+def clean_save_company():
+    df = pd.read_csv('../data/us_companies.csv')
+    for i, row in df.iterrows():
+        row['description'] = re.sub('\"', '', row['description']).strip()
+        if type(row['city']) != str:
+            location = row['state']
+        else:
+            location = row['city'] + "," + row['state']
+
+        sql = "INSERT INTO companies (id, name, location, year_founded, category, description) VALUES "
+        sql += '("{}", "{}", "{}", "{}", "{}", """{}""")'.format(row['company_name_id'], row['company_name'],
+                                                location,
+                                                row['year_founded'], row['company_category'], row['description'])
+        try:
+            cur.execute(sql)
+        except Exception as e:
+            print(e)
+            print(sql)
+            continue
+
+    conn.commit()
+
 
 
 def main():
@@ -153,8 +173,8 @@ if __name__ == "__main__":
     # create_tables()
 
     # visa single
-    visa_records = get_data_from_myvisa(IF_TEST)
-    clean_save_visa(visa_records)
+    # visa_records = get_data_from_myvisa(IF_TEST)
+    # clean_save_visa(visa_records)
 
     #positions
     # refresh_jobs()
@@ -162,5 +182,7 @@ if __name__ == "__main__":
     # adzuna_jobs = pull_adzuna_jobs(IF_TEST)
     # data = {'github_jobs': github_jobs, 'adzuna_jobs': adzuna_jobs}
     # clean_save_job(data)
+
+    clean_save_company()
 
 
