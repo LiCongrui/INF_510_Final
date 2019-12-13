@@ -1,6 +1,7 @@
 import sqlite3
 import os
-conn = sqlite3.connect("data/career.db")
+conn = sqlite3.connect("data/career.db") #jupyter notebook
+# conn = sqlite3.connect("../data/career.db") #local
 cur = conn.cursor()
 
 
