@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect('raw_data_files/career.db')
+conn = sqlite3.connect('../data/career.db')
 cur = conn.cursor()
 
 
@@ -28,3 +28,19 @@ def create_tables():
     result = cur.fetchall()
     print('create table: ', result)
     conn.commit()
+
+def refresh_jobs():
+    # positions: id, company, title, location, description, created, url
+    cur.execute('DROP TABLE IF EXISTS positions')
+    cur.execute("create table positions(" +
+                "position_id INTEGER primary key, "+
+                "company varchar(30), "+
+                "title varchar(50),"+
+                "location varchar(30),"+
+                "description text,"+
+                "created varchar(20),"+
+                "url text);")
+    conn.commit()
+
+if __name__ == '__main__':
+    pass

@@ -30,7 +30,7 @@ password = "fihPur-1qokno-syjxid"
 # companyURL = "https://www.glassdoor.com/Interview/Microsoft-Software-Development-Engineer-Interview-Questions-EI_IE1651.0,9_KO10,39.htm"
 
 def csv_export(data, companyName):
-    csv = open('raw_data_files/companies/' + companyName + ".csv", 'w')
+    csv = open('../data/companies/' + companyName + ".csv", 'w')
     for content in data:
         row = content.date + ',' + content.role + ',' + content.gotOffer + ',' + content.experience + ',' + content.difficulty + ',' + content.length + ',' + content.details + ','
         for x in content.questions:
